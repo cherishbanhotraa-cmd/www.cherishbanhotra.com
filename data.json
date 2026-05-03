@@ -1,0 +1,28 @@
+{
+  "profile": {
+    "name": "Cherish Banhotra",
+    "role": "Singer",
+    "about": "A contemporary artist known for innovative approaches to visual storytelling.",
+    "recognition": "Featured globally and recognized for modern expression."
+  },
+  "releases": [
+    {
+      "title": "Roothe Roothe",
+      "artists": "Harjas Harjaayi, Cherish Banhotra, Sshiv",
+      "spotify": "https://open.spotify.com/track/4f8G5x6a7Vj8QxjP6Pp2R8",
+      "youtube": "https://youtu.be/"
+    },
+    {
+      "title": "Tumhari Tasveeren",
+      "artists": "Harjas Harjaayi, Cherish Banhotra, Sshiv",
+      "spotify": "https://open.spotify.com/track/5vWgD2Q4fAgjM9QCYGxKTv",
+      "youtube": "https://youtu.be/"
+    }
+  ],
+  "gallery": [
+    "https://via.placeholder.com/400",
+    "https://via.placeholder.com/401",
+    "https://via.placeholder.com/402",
+    "https://via.placeholder.com/403"
+  ]
+}

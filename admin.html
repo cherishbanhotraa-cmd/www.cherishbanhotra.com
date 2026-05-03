@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="section">
+    <h1>Dashboard Admin</h1>
+    <p>Use this panel to manage profile text and releases.</p>
+
+    <section>
+      <h2>Profile</h2>
+      <form id="profileForm">
+        <input name="name" placeholder="Name" />
+        <input name="role" placeholder="Role" />
+        <textarea name="about" placeholder="About"></textarea>
+        <textarea name="recognition" placeholder="Recognition"></textarea>
+        <button type="submit" class="btn">Save Profile</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Add Release</h2>
+      <form id="releaseForm">
+        <input name="title" placeholder="Title" required />
+        <input name="artists" placeholder="Artists" required />
+        <input name="spotify" placeholder="Spotify URL" />
+        <input name="youtube" placeholder="YouTube URL" />
+        <button type="submit" class="btn">Add Release</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Current Releases</h2>
+      <ul id="releaseList"></ul>
+    </section>
+  </main>
+
+  <script>
+    async function getDashboard() {
+      const r = await fetch('/api/dashboard');
+      return r.json();
+    }
+
+    async function refresh() {
+      const data = await getDashboard();
+      profileForm.name.value = data.profile.name || '';
+      profileForm.role.value = data.profile.role || '';
+      profileForm.about.value = data.profile.about || '';
+      profileForm.recognition.value = data.profile.recognition || '';
+
+      releaseList.innerHTML = data.releases.map((r, i) =>
+        `<li>${r.title} — ${r.artists} <button data-index="${i}">Delete</button></li>`
+      ).join('');
+    }
+
+    profileForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = Object.fromEntries(new FormData(profileForm).entries());
+      await fetch('/api/dashboard/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      refresh();
+    });
+
+    releaseForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = Object.fromEntries(new FormData(releaseForm).entries());
+      await fetch('/api/dashboard/releases', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      releaseForm.reset();
+      refresh();
+    });
+
+    releaseList.addEventListener('click', async (e) => {
+      if (!(e.target instanceof HTMLButtonElement)) return;
+      const i = e.target.dataset.index;
+      await fetch(`/api/dashboard/releases/${i}`, { method: 'DELETE' });
+      refresh();
+    });
+
+    refresh();
+  </script>
+</body>
+</html>
